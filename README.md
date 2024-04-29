@@ -1,3 +1,8 @@
+# TubeCord
+A fork of Waterfall with more support and new features.
+
+Origin README: 
+
 Waterfall
 =========
 

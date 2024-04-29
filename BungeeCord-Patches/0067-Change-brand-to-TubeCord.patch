@@ -1,0 +1,736 @@
+From 108ebc8aaad26c4c45ee2970cf186f7a5da431f4 Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Mon, 29 Apr 2024 19:09:15 +0800
+Subject: [PATCH] Change brand to TubeCord
+
+
+diff --git a/api/pom.xml b/api/pom.xml
+index a4ccb90c..74459d2c 100644
+--- a/api/pom.xml
++++ b/api/pom.xml
+@@ -4,42 +4,42 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-api</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-api</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-API</name>
++    <name>TubeCord-API</name>
+     <description>API implemented by the Elastic Portal Suite</description>
+ 
+     <dependencies>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-chat</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-chat</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-config</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-config</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-event</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-event</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-protocol</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-protocol</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+diff --git a/bootstrap/pom.xml b/bootstrap/pom.xml
+index 0cb96e7c..1287a576 100644
+--- a/bootstrap/pom.xml
++++ b/bootstrap/pom.xml
+@@ -4,19 +4,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-bootstrap</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-bootstrap</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Bootstrap</name>
+-    <description>Java 1.6 loader for Waterfall</description>
++    <name>TubeCord-Bootstrap</name>
++    <description>Java 1.6 loader for TubeCord</description>
+ 
+     <properties>
+         <maven.deploy.skip>true</maven.deploy.skip>
+@@ -29,15 +29,15 @@
+ 
+     <dependencies>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-proxy</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-proxy</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+     </dependencies>
+ 
+     <build>
+-        <finalName>Waterfall</finalName>
++        <finalName>TubeCord</finalName>
+         <plugins>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+@@ -47,7 +47,7 @@
+                     <archive>
+                         <manifestEntries>
+                             <Main-Class>net.md_5.bungee.Bootstrap</Main-Class>
+-                            <Implementation-Version>${describe}</Implementation-Version>
++                            <Implementation-Version>${build.number}</Implementation-Version>
+                             <Specification-Version>${maven.build.timestamp}</Specification-Version>
+ 
+                             <!-- Log4j includes custom classes for Java 9+ (#293) -->
+diff --git a/chat/pom.xml b/chat/pom.xml
+index 3cfa8ac3..4aa20cc2 100644
+--- a/chat/pom.xml
++++ b/chat/pom.xml
+@@ -4,19 +4,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-chat</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-chat</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Chat</name>
+-    <description>Minecraft JSON chat API intended for use with Waterfall</description>
++    <name>TubeCord-Chat</name>
++    <description>Minecraft JSON chat API intended for use with TubeCord</description>
+ 
+     <dependencies>
+         <dependency>
+diff --git a/config/pom.xml b/config/pom.xml
+index 13b2481d..a7ff978e 100644
+--- a/config/pom.xml
++++ b/config/pom.xml
+@@ -4,19 +4,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-config</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-config</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Config</name>
+-    <description>Generic java configuration API intended for use with Waterfall</description>
++    <name>TubeCord-Config</name>
++    <description>Generic java configuration API intended for use with TubeCord</description>
+ 
+     <dependencies>
+         <dependency>
+diff --git a/event/pom.xml b/event/pom.xml
+index 120d21b2..bef0071e 100644
+--- a/event/pom.xml
++++ b/event/pom.xml
+@@ -4,17 +4,17 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-event</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-event</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Event</name>
+-    <description>Generic java event dispatching API intended for use with Waterfall.</description>
++    <name>TubeCord-Event</name>
++    <description>Generic java event dispatching API intended for use with TubeCord.</description>
+ </project>
+diff --git a/log/pom.xml b/log/pom.xml
+index 09b75466..6fb00a1a 100644
+--- a/log/pom.xml
++++ b/log/pom.xml
+@@ -4,19 +4,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-log</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-log</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Log</name>
+-    <description>Simplistic and performant java.util.Logger based logger and console API designed for use with Waterfall and Minecraft related applications.</description>
++    <name>TubeCord-Log</name>
++    <description>Simplistic and performant java.util.Logger based logger and console API designed for use with TubeCord and Minecraft related applications.</description>
+ 
+     <dependencies>
+         <dependency>
+@@ -26,8 +26,8 @@
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-chat</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-chat</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+diff --git a/log4j/pom.xml b/log4j/pom.xml
+index f9bdf71f..df900996 100644
+--- a/log4j/pom.xml
++++ b/log4j/pom.xml
+@@ -3,19 +3,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-log4j</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-log4j</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Log4J</name>
+-    <description>Simplistic and performant Log4j2 based logger and console API designed for use with Waterfall and Minecraft related applications.</description>
++    <name>TubeCord-Log4J</name>
++    <description>Simplistic and performant Log4j2 based logger and console API designed for use with TubeCord and Minecraft related applications.</description>
+ 
+     <properties>
+         <log4j2.version>2.20.0</log4j2.version>
+diff --git a/module/cmd-alert/pom.xml b/module/cmd-alert/pom.xml
+index 095368b4..cb868105 100644
+--- a/module/cmd-alert/pom.xml
++++ b/module/cmd-alert/pom.xml
+@@ -4,14 +4,14 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-module</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-module</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-module-cmd-alert</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-module-cmd-alert</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+diff --git a/module/cmd-find/pom.xml b/module/cmd-find/pom.xml
+index 6bf9bdcf..72b404fa 100644
+--- a/module/cmd-find/pom.xml
++++ b/module/cmd-find/pom.xml
+@@ -4,14 +4,14 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-module</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-module</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-module-cmd-find</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-module-cmd-find</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+diff --git a/module/cmd-kick/pom.xml b/module/cmd-kick/pom.xml
+index 5e5cab83..5c6a278f 100644
+--- a/module/cmd-kick/pom.xml
++++ b/module/cmd-kick/pom.xml
+@@ -4,14 +4,14 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-module</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-module</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-module-cmd-kick</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-module-cmd-kick</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+diff --git a/module/cmd-list/pom.xml b/module/cmd-list/pom.xml
+index 670a55f4..a7f97268 100644
+--- a/module/cmd-list/pom.xml
++++ b/module/cmd-list/pom.xml
+@@ -4,14 +4,14 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-module</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-module</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-module-cmd-list</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-module-cmd-list</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+diff --git a/module/cmd-send/pom.xml b/module/cmd-send/pom.xml
+index 6c65d8f4..bb4d817f 100644
+--- a/module/cmd-send/pom.xml
++++ b/module/cmd-send/pom.xml
+@@ -4,14 +4,14 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-module</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-module</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-module-cmd-send</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-module-cmd-send</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+diff --git a/module/cmd-server/pom.xml b/module/cmd-server/pom.xml
+index dc3af35e..78bb6948 100644
+--- a/module/cmd-server/pom.xml
++++ b/module/cmd-server/pom.xml
+@@ -4,14 +4,14 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-module</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-module</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-module-cmd-server</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-module-cmd-server</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+diff --git a/module/pom.xml b/module/pom.xml
+index baa24b7d..47e61815 100644
+--- a/module/pom.xml
++++ b/module/pom.xml
+@@ -4,19 +4,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-module</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-module</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>pom</packaging>
+ 
+-    <name>Waterfall Modules</name>
+-    <description>Parent project for all Waterfall modules.</description>
++    <name>TubeCord Modules</name>
++    <description>Parent project for all TubeCord modules.</description>
+ 
+     <modules>
+         <module>cmd-alert</module>
+@@ -29,15 +29,15 @@
+     </modules>
+ 
+     <properties>
+-        <module.author>WaterfallMC</module.author>
++        <module.author>TCBuildMC</module.author>
+         <maven.deploy.skip>true</maven.deploy.skip>
+         <maven.javadoc.skip>true</maven.javadoc.skip>
+     </properties>
+ 
+     <dependencies>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-api</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-api</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+diff --git a/module/reconnect-yaml/pom.xml b/module/reconnect-yaml/pom.xml
+index 7d8cf5c4..31f335f4 100644
+--- a/module/reconnect-yaml/pom.xml
++++ b/module/reconnect-yaml/pom.xml
+@@ -4,14 +4,14 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-module</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-module</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-module-reconnect-yaml</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-module-reconnect-yaml</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+diff --git a/native/pom.xml b/native/pom.xml
+index f7bae2fe..49a08458 100644
+--- a/native/pom.xml
++++ b/native/pom.xml
+@@ -4,19 +4,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-native</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-native</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Native</name>
+-    <description>Optional native code to speed up and enhance Waterfall functionality.</description>
++    <name>TubeCord-Native</name>
++    <description>Optional native code to speed up and enhance TubeCord functionality.</description>
+ 
+     <dependencies>
+         <dependency>
+diff --git a/pom.xml b/pom.xml
+index a1cd1953..3b5d9cfa 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -3,18 +3,18 @@
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-parent</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-parent</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>pom</packaging>
+ 
+-    <name>Waterfall-Parent</name>
+-    <description>Parent project for all Waterfall modules.</description>
+-    <url>https://github.com/WaterfallMC/Waterfall</url>
++    <name>TubeCord-Parent</name>
++    <description>Parent project for all TubeCord modules.</description>
++    <url>https://github.com/TCBuildMCMC/TubeCord</url>
+     <inceptionYear>2015</inceptionYear>
+     <organization>
+-        <name>WaterfallMC</name>
+-        <url>https://github.com/WaterfallMC</url>
++        <name>TCBuildMC</name>
++        <url>https://github.com/TCBuildMC</url>
+     </organization>
+     <licenses>
+         <license>
+@@ -59,13 +59,13 @@
+     </modules>
+ 
+     <scm>
+-        <connection>scm:git:git@github.com:com:WaterfallMC/Waterfall.git</connection>
+-        <developerConnection>scm:git:git@github.com:WaterfallMC/Waterfall.git</developerConnection>
+-        <url>git@github.com:WaterfallMC/Waterfall.git</url>
++        <connection>scm:git:git@github.com:com:TCBuildMC/TubeCord.git</connection>
++        <developerConnection>scm:git:git@github.com:TCBuildMC/TubeCord.git</developerConnection>
++        <url>git@github.com:TCBuildMC/TubeCord.git</url>
+     </scm>
+     <issueManagement>
+         <system>GitHub</system>
+-        <url>https://github.com/PaperMC/Waterfall/issues</url>
++        <url>https://github.com/TCbuildMC/TubeCord/issues</url>
+     </issueManagement>
+ 
+     <distributionManagement>
+diff --git a/protocol/pom.xml b/protocol/pom.xml
+index db62c340..71e514db 100644
+--- a/protocol/pom.xml
++++ b/protocol/pom.xml
+@@ -4,19 +4,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-protocol</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-protocol</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Protocol</name>
+-    <description>Minimal implementation of the Minecraft protocol for use in Waterfall</description>
++    <name>TubeCord-Protocol</name>
++    <description>Minimal implementation of the Minecraft protocol for use in TubeCord</description>
+ 
+     <!-- We really shouldn't depend on external repositories -->
+     <repositories>
+@@ -35,8 +35,8 @@
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-chat</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-chat</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+diff --git a/proxy/pom.xml b/proxy/pom.xml
+index 1786d303..b57d0ac4 100644
+--- a/proxy/pom.xml
++++ b/proxy/pom.xml
+@@ -4,18 +4,18 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-proxy</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-proxy</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Proxy</name>
++    <name>TubeCord-Proxy</name>
+     <description>Proxy component of the Elastic Portal Suite</description>
+ 
+     <properties>
+@@ -76,39 +76,39 @@
+             <classifier>linux-aarch_64</classifier>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-api</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-api</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-log4j</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-log4j</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-native</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-native</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-protocol</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-protocol</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-query</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-query</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <!-- // Waterfall - We already bundle an slf4j impl
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-slf4j</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-slf4j</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency> // Waterfall - We already bundle an slf4j impl -->
+diff --git a/query/pom.xml b/query/pom.xml
+index 4b6fdfc2..b7ca0611 100644
+--- a/query/pom.xml
++++ b/query/pom.xml
+@@ -4,19 +4,19 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
+-        <artifactId>waterfall-parent</artifactId>
++        <groupId>xyz.tcbuildmc.tubecord</groupId>
++        <artifactId>tubecord-parent</artifactId>
+         <version>1.20-R0.3-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+-    <artifactId>waterfall-query</artifactId>
++    <groupId>xyz.tcbuildmc.tubecord</groupId>
++    <artifactId>tubecord-query</artifactId>
+     <version>1.20-R0.3-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-    <name>Waterfall-Query</name>
+-    <description>Minecraft query implementation based on the Waterfall API.</description>
++    <name>TubeCord-Query</name>
++    <description>Minecraft query implementation based on the TubeCord API.</description>
+ 
+     <dependencies>
+         <dependency>
+@@ -25,8 +25,8 @@
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
+-            <artifactId>waterfall-api</artifactId>
++            <groupId>xyz.tcbuildmc.tubecord</groupId>
++            <artifactId>tubecord-api</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+-- 
+2.34.1
+
