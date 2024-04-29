@@ -1,30 +1,62 @@
-name: Build Waterfall
+name: Build TubeCord
 on:
   push:
     branches:
-      - master
-      - actions #temp
+      - '**'
   pull_request:
     branches:
-      - master
+      - '**'
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [8, 11, 17, 21]
+        java: [8]
+        os: ["ubuntu-latest"]
       fail-fast: true
+
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Java ${{ matrix.java }}
-        uses: actions/setup-java@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup jdk ${{ matrix.java }}
+        uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
           distribution: 'zulu'
-      - name: patch
+
+      - name: Configure git
         run: |
-          git config --global user.email "no-reply@github.com"
           git config --global user.name "Github Actions"
-          ./waterfall p
-      - name: build
-        run: mvn clean install javadoc:javadoc -B
+
+      - name: Update upstream
+        run: |
+          git submodule update --recursive --init
+
+      - name: Apply patches
+        run: |
+          ./scripts/applyPatches.sh
+
+      - name: Build with Maven
+        run: | 
+          mvn -B clean package "-Dbuild.number=$GITHUB_RUN_NUMBER"
+
+      - name: Get commit SHA
+        run: |
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: TubeCord-${{ env.SHORT_SHA }}
+          path: |
+            Waterfall-Proxy/bootstrap/target/TubeCord.jar
+            Waterfall-Proxy/module/cmd-alert/target/cmd_alert.jar
+            Waterfall-Proxy/module/cmd-find/target/cmd_find.jar
+            Waterfall-Proxy/module/cmd-kick/target/cmd_kick.jar
+            Waterfall-Proxy/module/cmd-list/target/cmd_list.jar
+            Waterfall-Proxy/module/cmd-send/target/cmd_send.jar
+            Waterfall-Proxy/module/cmd-server/target/cmd_server.jar
+            Waterfall-Proxy/module/reconnect-yaml/target/reconnect_yaml.jar
