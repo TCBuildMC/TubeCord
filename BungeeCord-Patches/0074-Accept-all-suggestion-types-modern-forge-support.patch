@@ -1,0 +1,22 @@
+From a9c09529f815e6f1a365126798ae4d4f3d3bd38c Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Tue, 30 Apr 2024 19:43:24 +0800
+Subject: [PATCH] Accept all suggestion types modern forge support
+
+
+diff --git a/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java b/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
+index 526b8dd9..31e106f2 100644
+--- a/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
++++ b/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
+@@ -1080,7 +1080,7 @@ public class Commands extends DefinedPacket
+ 
+         private static SuggestionProvider<DummyProvider> getProvider(String key)
+         {
+-            SuggestionProvider<DummyProvider> provider = PROVIDERS.get( key );
++            SuggestionProvider<DummyProvider> provider = PROVIDERS.computeIfAbsent( key, DummyProvider::new ); // TubeCord - Add modern forge support (via lightfall) // lightfall - accept any suggestion
+             Preconditions.checkArgument( provider != null, "Unknown completion provider " + key );
+ 
+             return provider;
+-- 
+2.34.1
+

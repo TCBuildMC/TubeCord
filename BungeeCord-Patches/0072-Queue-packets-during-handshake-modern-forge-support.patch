@@ -1,0 +1,90 @@
+From 6c4f98df8e5ac4e2625d27426dafa9822cb47f0b Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Tue, 30 Apr 2024 19:08:53 +0800
+Subject: [PATCH] Queue packets during handshake modern forge support
+
+
+diff --git a/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeServerConnector.java b/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeServerConnector.java
+index 4bc136d4..3a8a5140 100644
+--- a/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeServerConnector.java
++++ b/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeServerConnector.java
+@@ -60,6 +60,7 @@ public class ModernForgeServerConnector extends ServerConnector {
+         if (thisState == State.ACK) {
+                 user.unsafe().sendPacket(loginSuccess);
+                 user.getCh().setProtocol(Protocol.GAME);
++                user.getCh().endHandshake();
+                 user.getCh().getHandle().pipeline().get(HandlerBoss.class).setHandler(new UpstreamBridge(bungee, user));
+                 thisState = State.PLAIN;
+             }
+@@ -79,6 +80,7 @@ public class ModernForgeServerConnector extends ServerConnector {
+                         user.getCh().getHandle().flush();
+                         user.getCh().write(ForgeConstants.MODERN_FML_RESET);
+                         user.getCh().setProtocol(Protocol.LOGIN);
++                        user.getCh().beginHandshake();
+                         user.getCh().getHandle().pipeline().get(HandlerBoss.class).setHandler(new ModernForgeUpstreamBridge(bungee, user, this));
+                         if (user.getServer() != null) {
+                                 user.getServer().setObsolete(true);
+diff --git a/proxy/src/main/java/net/md_5/bungee/netty/ChannelWrapper.java b/proxy/src/main/java/net/md_5/bungee/netty/ChannelWrapper.java
+index 00e03bae..f5326232 100644
+--- a/proxy/src/main/java/net/md_5/bungee/netty/ChannelWrapper.java
++++ b/proxy/src/main/java/net/md_5/bungee/netty/ChannelWrapper.java
+@@ -6,6 +6,8 @@ import io.netty.channel.ChannelFutureListener;
+ import io.netty.channel.ChannelHandler;
+ import io.netty.channel.ChannelHandlerContext;
+ import java.net.SocketAddress;
++import java.util.Queue;
++import java.util.concurrent.ConcurrentLinkedQueue;
+ import java.util.concurrent.TimeUnit;
+ import lombok.Getter;
+ import lombok.Setter;
+@@ -17,6 +19,8 @@ import net.md_5.bungee.protocol.MinecraftEncoder;
+ import net.md_5.bungee.protocol.PacketWrapper;
+ import net.md_5.bungee.protocol.Protocol;
+ import net.md_5.bungee.protocol.packet.Kick;
++import net.md_5.bungee.protocol.packet.LoginPayloadRequest;
++import net.md_5.bungee.protocol.packet.LoginSuccess;
+ 
+ public class ChannelWrapper
+ {
+@@ -78,6 +82,17 @@ public class ChannelWrapper
+     {
+         if ( !closed )
+         {
++            // TubeCord - Add modern forge support (via lightfall) // lightfall start
++            if (queueGamePacket) {
++                Object actual = packet instanceof PacketWrapper ? ((PacketWrapper) packet).packet : packet;
++                if (actual instanceof LoginPayloadRequest || actual instanceof Kick || actual instanceof LoginSuccess) {
++                        ch.writeAndFlush(actual, ch.voidPromise());
++                    } else {
++                        packetQueue.add(packet);
++                    }
++                return;
++            }
++            // lightfall end
+             DefinedPacket defined = null;
+             if ( packet instanceof PacketWrapper )
+             {
+@@ -188,4 +203,20 @@ public class ChannelWrapper
+             ch.pipeline().remove( "decompress" );
+         }
+     }
++
++    // TubeCord - Add modern forge support (via lightfall) // lightfall start
++    private volatile boolean queueGamePacket = false;
++    private final Queue<Object> packetQueue = new ConcurrentLinkedQueue<>();
++
++    public void beginHandshake() {
++        queueGamePacket = true;
++    }
++
++    public void endHandshake() {
++        queueGamePacket = false;
++        while ( !packetQueue.isEmpty() ) {
++            write( packetQueue.poll() );
++        }
++    }
++    // lightfall end
+ }
+-- 
+2.34.1
+

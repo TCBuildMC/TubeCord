@@ -1,0 +1,109 @@
+From 027260627df2dd348a80a8ccc85d1f8a511af623 Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Tue, 30 Apr 2024 19:56:53 +0800
+Subject: [PATCH] Implement ModernFMLHandshakeEvent from lightfallApi modern
+ forge support
+
+
+diff --git a/api/pom.xml b/api/pom.xml
+index 74459d2c..d37df945 100644
+--- a/api/pom.xml
++++ b/api/pom.xml
+@@ -18,6 +18,14 @@
+     <name>TubeCord-API</name>
+     <description>API implemented by the Elastic Portal Suite</description>
+ 
++    <!-- TubeCord - Add modern forge support (via lightfall) -->
++    <repositories>
++        <repository>
++            <id>LightfallMaven</id>
++            <url>https://maven.izzel.io/releases</url>
++        </repository>
++    </repositories>
++
+     <dependencies>
+         <dependency>
+             <groupId>xyz.tcbuildmc.tubecord</groupId>
+@@ -75,5 +83,11 @@
+             <version>2.2</version>
+             <scope>compile</scope>
+         </dependency>
++        <!-- TubeCord - Add modern forge support (via lightfall) -->
++        <dependency>
++            <groupId>io.izzel.lightfall</groupId>
++            <artifactId>lightfall-api</artifactId>
++            <version>1.1.1</version>
++        </dependency>
+     </dependencies>
+ </project>
+diff --git a/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeServerConnector.java b/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeServerConnector.java
+index 3a8a5140..a396b9a1 100644
+--- a/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeServerConnector.java
++++ b/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeServerConnector.java
+@@ -93,7 +93,7 @@ public class ModernForgeServerConnector extends ServerConnector {
+                         break;
+                     }
+                 case ACK: {
+-                        user.unsafe().sendPacket(request);
++                        writePacket(request);
+                         break;
+                     }
+             }
+@@ -102,11 +102,22 @@ public class ModernForgeServerConnector extends ServerConnector {
+     public void onResetAck() {
+         Preconditions.checkState(thisState == State.PENDING, "Not expecting PENDING");
+         while (!pendingHandshakes.isEmpty()) {
+-                user.unsafe().sendPacket(pendingHandshakes.poll());
++                writePacket(pendingHandshakes.poll());
+             }
+         thisState = State.ACK;
+     }
+ 
++    private void writePacket(LoginPayloadRequest packet) {
++        ModernFMLHandshakeEvent.Request event = new ModernFMLHandshakeEvent.Request(user, target, packet);
++        if (event.callEvent()) {
++            user.unsafe().sendPacket(packet);
++        } else {
++            if (event.getResponse() != null) {
++                user.getForgeServerHandler().getCh().write(event.getResponse());
++            }
++        }
++    }
++
+     public ChannelWrapper getChannel() {
+         return this.ch;
+     }
+@@ -119,4 +130,8 @@ public class ModernForgeServerConnector extends ServerConnector {
+                 return super.toString();
+             }
+     }
++
++    public BungeeServerInfo getTarget() {
++        return this.target;
++    }
+ }
+diff --git a/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeUpstreamBridge.java b/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeUpstreamBridge.java
+index 30ba5c9b..44824ee0 100644
+--- a/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeUpstreamBridge.java
++++ b/proxy/src/main/java/io/izzel/lightfall/forge/ModernForgeUpstreamBridge.java
+@@ -1,5 +1,6 @@
+ package io.izzel.lightfall.forge;
+ 
++import io.izzel.lightfall.api.event.ModernFMLHandshakeEvent;
+ import io.netty.handler.timeout.ReadTimeoutException;
+ import lombok.RequiredArgsConstructor;
+ import net.md_5.bungee.BungeeCord;
+@@ -33,7 +34,9 @@ public class ModernForgeUpstreamBridge extends PacketHandler {
+         if (isAckPacket(response)) {
+                 server.onResetAck();
+             } else {
+-                con.getForgeServerHandler().getCh().write(response);
++                if (new ModernFMLHandshakeEvent.Response(con, server.getTarget(), response).callEvent()) {
++                    con.getForgeServerHandler().getCh().write(response);
++                }
+             }
+     }
+ 
+-- 
+2.34.1
+

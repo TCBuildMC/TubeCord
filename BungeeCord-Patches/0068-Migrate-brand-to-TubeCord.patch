@@ -1,11 +1,11 @@
-From f062dc8506cc469dc86f411d42df649b028eba09 Mon Sep 17 00:00:00 2001
+From 2e7f6ff68f3dcfe0dff1be1880d4c0c3926e1ebd Mon Sep 17 00:00:00 2001
 From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
 Date: Mon, 29 Apr 2024 19:23:54 +0800
 Subject: [PATCH] Migrate brand to TubeCord
 
 
 diff --git a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
-index 9b93d2c3..9f85cf66 100644
+index 9b93d2c3..2d3a43f2 100644
 --- a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
 +++ b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
 @@ -548,7 +548,7 @@ public class BungeeCord extends ProxyServer
@@ -13,7 +13,7 @@ index 9b93d2c3..9f85cf66 100644
      public String getName()
      {
 -        return "Waterfall";
-+        return "Waterfall"; // TubeCord - Migrate brand to TubeCord
++        return "TubeCord"; // TubeCord - Migrate brand to TubeCord
      }
  
      @Override

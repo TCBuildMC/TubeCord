@@ -1,0 +1,221 @@
+From 013f6ed0b88a315ac6f986d944833ca084114dee Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Tue, 30 Apr 2024 19:41:07 +0800
+Subject: [PATCH] Wrap modded command arguments modern forge support
+
+
+diff --git a/protocol/src/main/java/io/izzel/lightfall/forge/WrappedArgumentType.java b/protocol/src/main/java/io/izzel/lightfall/forge/WrappedArgumentType.java
+new file mode 100644
+index 00000000..fad4c3d6
+--- /dev/null
++++ b/protocol/src/main/java/io/izzel/lightfall/forge/WrappedArgumentType.java
+@@ -0,0 +1,21 @@
++package io.izzel.lightfall.forge;
++
++import com.mojang.brigadier.StringReader;
++import com.mojang.brigadier.arguments.ArgumentType;
++import com.mojang.brigadier.exceptions.CommandSyntaxException;
++import lombok.Data;
++import lombok.RequiredArgsConstructor;
++
++@RequiredArgsConstructor
++@Data
++public class WrappedArgumentType implements ArgumentType<Object> {
++
++    public final String actualKey;
++    public final int actualIntKey;
++    public final byte[] actualPayload;
++
++    @Override
++    public Object parse(StringReader stringReader) throws CommandSyntaxException {
++        throw new UnsupportedOperationException("Not supported.");
++    }
++}
+diff --git a/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java b/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
+index 6523ed30..526b8dd9 100644
+--- a/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
++++ b/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
+@@ -21,6 +21,7 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
+ import com.mojang.brigadier.tree.CommandNode;
+ import com.mojang.brigadier.tree.LiteralCommandNode;
+ import com.mojang.brigadier.tree.RootCommandNode;
++import io.izzel.lightfall.forge.WrappedArgumentType;
+ import io.netty.buffer.ByteBuf;
+ import java.util.ArrayDeque;
+ import java.util.Collection;
+@@ -537,6 +538,65 @@ public class Commands extends DefinedPacket
+             }
+         };
+ 
++        // TubeCord - Add modern forge support (via lightfall) // lightfall start
++        private static final ArgumentSerializer<String> FORGE_ENUM = new ArgumentSerializer<String>() {
++                @Override
++                protected String read(ByteBuf buf) {
++                    return readString(buf);
++                }
++
++                @Override
++                protected void write(ByteBuf buf, String enumClass) {
++                    writeString(enumClass, buf);
++                }
++        };
++        private static final int ARCLIGHT_WRAP_INDEX = -256;
++        private static final ProperArgumentSerializer<WrappedArgumentType> ARCLIGHT_WRAP = new ProperArgumentSerializer<WrappedArgumentType>() {
++                @Override
++                protected String getKey() {
++                    throw new IllegalStateException();
++                }
++
++                @Override
++                protected String getKey(WrappedArgumentType t) {
++                    return t.actualKey;
++                }
++
++                @Override
++                protected int getIntKey() {
++                    throw new UnsupportedOperationException("getIntKey");
++                }
++
++                @Override
++                protected int getIntKey(WrappedArgumentType t) {
++                    return t.actualIntKey;
++                }
++
++                @Override
++                protected WrappedArgumentType read(ByteBuf buf) {
++                    throw new UnsupportedOperationException("read");
++                }
++
++                @Override
++                protected WrappedArgumentType read(ByteBuf buf, int protocolVersion) {
++                    if (protocolVersion >= ProtocolConstants.MINECRAFT_1_19) {
++                        int actualKey = readVarInt(buf);
++                        byte[] bytes = readArray(buf);
++                        return new WrappedArgumentType(null, actualKey, bytes);
++                    } else {
++                        String actualKey = readString(buf);
++                        byte[] bytes = readArray(buf);
++                        return new WrappedArgumentType(actualKey, -1, bytes);
++                    }
++                }
++
++                @Override
++                protected void write(ByteBuf buf, WrappedArgumentType t) {
++                    buf.writeBytes(t.actualPayload);
++                }
++        };
++        // lightfall end
++
+         static
+         {
+             register( "brigadier:bool", VOID );
+@@ -858,6 +918,13 @@ public class Commands extends DefinedPacket
+                 get( "minecraft:loot_predicate", VOID ),
+                 get( "minecraft:loot_modifier", VOID )
+             };
++            // TubeCord - Add modern forge support (via lightfall) // lightfall start
++            PROVIDERS.put( "forge:enum", FORGE_ENUM );
++            PROVIDERS.put( "forge:modid", VOID );
++            PROVIDERS.put( "minecraft:", VOID );
++            PROVIDERS.put( "arclight:wrapped", ARCLIGHT_WRAP );
++            PROPER_PROVIDERS.put( WrappedArgumentType.class, ARCLIGHT_WRAP );
++            // lightfall end
+         }
+ 
+         private static void register(String name, ArgumentSerializer serializer)
+@@ -879,6 +946,12 @@ public class Commands extends DefinedPacket
+             {
+                 key = readVarInt( buf );
+ 
++                // TubeCord - Add modern forge support (via lightfall) // lightfall - start
++                if (key.equals(ARCLIGHT_WRAP_INDEX)) {
++                    reader = ARCLIGHT_WRAP;
++                } else
++                // lightfall - end
++
+                 if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_20_5 )
+                 {
+                     reader = IDS_1_20_5[(Integer) key];
+@@ -901,9 +974,9 @@ public class Commands extends DefinedPacket
+                 reader = PROVIDERS.get( (String) key );
+             }
+ 
+-            Preconditions.checkArgument( reader != null, "No provider for argument " + key );
++            Preconditions.checkArgument( reader != null, "No provider for argument " +  key );
+ 
+-            Object val = reader.read( buf );
++            Object val = reader.read( buf, protocolVersion ); // TubeCord - Add modern forge support (via lightfall) // lightfall - use protocol version
+             return val != null && PROPER_PROVIDERS.containsKey( val.getClass() ) ? (ArgumentType<?>) val : new DummyType( key, reader, val );
+         }
+ 
+@@ -914,10 +987,10 @@ public class Commands extends DefinedPacket
+             {
+                 if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_19 )
+                 {
+-                    writeVarInt( proper.getIntKey(), buf );
++                    writeVarInt( proper.getIntKey(arg), buf ); // TubeCord - Add modern forge support (via lightfall) // lightfall - use arg
+                 } else
+                 {
+-                    writeString( proper.getKey(), buf );
++                    writeString( proper.getKey(arg), buf ); // TubeCord - Add modern forge support (via lightfall) // lightfall - use arg
+                 }
+                 proper.write( buf, arg );
+             } else
+@@ -956,6 +1029,12 @@ public class Commands extends DefinedPacket
+ 
+             protected abstract T read(ByteBuf buf);
+ 
++            // TubeCord - Add modern forge support (via lightfall) // lightfall start
++            protected T read(ByteBuf buf, int protocolVersion) {
++                return read(buf);
++            }
++            // lightfall end
++
+             protected abstract void write(ByteBuf buf, T t);
+         }
+ 
+@@ -965,6 +1044,16 @@ public class Commands extends DefinedPacket
+             protected abstract int getIntKey();
+ 
+             protected abstract String getKey();
++
++            /// TubeCord - Add modern forge support (via lightfall) / lightfall begin
++            protected String getKey(T t) {
++                return getKey();
++            }
++
++            protected int getIntKey(T t) {
++                return getIntKey();
++            }
++            // lightfall end
+         }
+     }
+ 
+diff --git a/proxy/src/main/java/net/md_5/bungee/UserConnection.java b/proxy/src/main/java/net/md_5/bungee/UserConnection.java
+index 5ca29e25..7595e037 100644
+--- a/proxy/src/main/java/net/md_5/bungee/UserConnection.java
++++ b/proxy/src/main/java/net/md_5/bungee/UserConnection.java
+@@ -4,8 +4,6 @@ import com.google.common.base.Preconditions;
+ import com.google.common.collect.HashMultimap;
+ import com.google.common.collect.ImmutableMap;
+ import com.google.common.collect.Multimap;
+-import io.izzel.lightfall.forge.ModernForgeClientHandler;
+-import io.izzel.lightfall.forge.ModernForgeServerConnector;
+ import io.netty.bootstrap.Bootstrap;
+ import io.netty.channel.Channel;
+ import io.netty.channel.ChannelFuture;
+diff --git a/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java b/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java
+index 3bca89be..0c116df3 100644
+--- a/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java
++++ b/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java
+@@ -97,6 +97,7 @@ public class DownstreamBridge extends PacketHandler
+             // do not perform any actions if the user has already moved
+             return;
+         }
++        t.printStackTrace(); // TubeCord - Add modern forge support (via lightfall)
+ 
+         // Waterfall start
+         ServerInfo def = con.updateAndGetNextServer( server.getInfo() );
+-- 
+2.34.1
+
