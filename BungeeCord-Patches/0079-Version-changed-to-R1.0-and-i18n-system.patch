@@ -1,0 +1,776 @@
+From b8e7aaaa85244fe267e04198e3993ee04a6944a2 Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Wed, 1 May 2024 17:33:09 +0800
+Subject: [PATCH] Version changed to R1.0 and i18n system
+
+
+diff --git a/api/pom.xml b/api/pom.xml
+index d37df945..b950102d 100644
+--- a/api/pom.xml
++++ b/api/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-api</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-API</name>
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyCancelEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyCancelEvent.java
+deleted file mode 100644
+index 39fe5940..00000000
+--- a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyCancelEvent.java
++++ /dev/null
+@@ -1,32 +0,0 @@
+-package xyz.tcbuildmc.tubecord.event;
+-
+-import lombok.Data;
+-import lombok.EqualsAndHashCode;
+-import lombok.ToString;
+-import net.md_5.bungee.api.plugin.Event;
+-
+-/**
+- * Call when proxy server cancelled. (Before plugins disabled)
+- */
+-@Data
+-@ToString(callSuper = false)
+-@EqualsAndHashCode(callSuper = false)
+-public class ProxyCancelEvent extends Event {
+-    private final EventState state;
+-    private final boolean success;
+-
+-    public ProxyCancelEvent(EventState state, boolean success) {
+-        super();
+-        this.state = state;
+-        this.success = success;
+-    }
+-
+-    public ProxyCancelEvent(EventState state) {
+-        this(state, true);
+-    }
+-
+-    public enum EventState {
+-        SERVER_LISTENER,
+-        SERVER_PROCESS
+-    }
+-}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyCancelEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyCancelEvent.java
+new file mode 100644
+index 00000000..5d921edb
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyCancelEvent.java
+@@ -0,0 +1,21 @@
++package xyz.tcbuildmc.tubecord.event.listener;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server listener cancelled.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyCancelEvent extends Event {
++    private final boolean success;
++
++    public ProxyCancelEvent(boolean success) {
++        super();
++        this.success = success;
++    }
++}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyQueryReadyEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyQueryReadyEvent.java
+new file mode 100644
+index 00000000..aa3037a6
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyQueryReadyEvent.java
+@@ -0,0 +1,21 @@
++package xyz.tcbuildmc.tubecord.event.listener;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server query listener was ready.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyQueryReadyEvent extends Event {
++    private final boolean success;
++
++    public ProxyQueryReadyEvent(boolean success) {
++        super();
++        this.success = success;
++    }
++}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyReadyEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyReadyEvent.java
+similarity index 50%
+rename from api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyReadyEvent.java
+rename to api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyReadyEvent.java
+index 389c4cdc..3fc056ca 100644
+--- a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyReadyEvent.java
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyReadyEvent.java
+@@ -1,29 +1,21 @@
+-package xyz.tcbuildmc.tubecord.event;
++package xyz.tcbuildmc.tubecord.event.listener;
+ 
+ import lombok.Data;
+ import lombok.EqualsAndHashCode;
+ import lombok.ToString;
+ import net.md_5.bungee.api.plugin.Event;
+ 
++/**
++ * Call when proxy server listener was ready.
++ */
+ @Data
+ @ToString(callSuper = false)
+ @EqualsAndHashCode(callSuper = false)
+ public class ProxyReadyEvent extends Event {
+-    private final EventState state;
+     private final boolean success;
+ 
+-    public ProxyReadyEvent(EventState state, boolean success) {
++    public ProxyReadyEvent(boolean success) {
+         super();
+-        this.state = state;
+         this.success = success;
+     }
+-
+-    public ProxyReadyEvent(EventState state) {
+-        this(state, true);
+-    }
+-
+-    public enum EventState {
+-        SERVER_LISTENER,
+-        QUERY_LISTENER
+-    }
+ }
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyStartEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyStartEvent.java
+new file mode 100644
+index 00000000..04a57d91
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyStartEvent.java
+@@ -0,0 +1,21 @@
++package xyz.tcbuildmc.tubecord.event.server;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server started.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyStartEvent extends Event {
++    private final boolean running;
++
++    public ProxyStartEvent(boolean running) {
++        super();
++        this.running = running;
++    }
++}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyStopEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyStopEvent.java
+new file mode 100644
+index 00000000..2dc7ee92
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyStopEvent.java
+@@ -0,0 +1,21 @@
++package xyz.tcbuildmc.tubecord.event.server;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server stopped.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyStopEvent extends Event {
++    private final boolean systemExit;
++
++    public ProxyStopEvent(boolean systemExit) {
++        super();
++        this.systemExit = systemExit;
++    }
++}
+diff --git a/bootstrap/pom.xml b/bootstrap/pom.xml
+index 1287a576..7b5dbd0a 100644
+--- a/bootstrap/pom.xml
++++ b/bootstrap/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-bootstrap</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Bootstrap</name>
+diff --git a/chat/pom.xml b/chat/pom.xml
+index 4aa20cc2..7622fc01 100644
+--- a/chat/pom.xml
++++ b/chat/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-chat</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Chat</name>
+diff --git a/config/pom.xml b/config/pom.xml
+index a7ff978e..1b76cef5 100644
+--- a/config/pom.xml
++++ b/config/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-config</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Config</name>
+diff --git a/event/pom.xml b/event/pom.xml
+index bef0071e..091f769d 100644
+--- a/event/pom.xml
++++ b/event/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-event</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Event</name>
+diff --git a/log/pom.xml b/log/pom.xml
+index 6fb00a1a..890af0c0 100644
+--- a/log/pom.xml
++++ b/log/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-log</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Log</name>
+diff --git a/log4j/pom.xml b/log4j/pom.xml
+index df900996..c4693fcb 100644
+--- a/log4j/pom.xml
++++ b/log4j/pom.xml
+@@ -5,13 +5,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-log4j</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Log4J</name>
+diff --git a/module/cmd-alert/pom.xml b/module/cmd-alert/pom.xml
+index cb868105..75d4b30c 100644
+--- a/module/cmd-alert/pom.xml
++++ b/module/cmd-alert/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-alert</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_alert</name>
+diff --git a/module/cmd-find/pom.xml b/module/cmd-find/pom.xml
+index 72b404fa..ed10c6e4 100644
+--- a/module/cmd-find/pom.xml
++++ b/module/cmd-find/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-find</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_find</name>
+diff --git a/module/cmd-kick/pom.xml b/module/cmd-kick/pom.xml
+index 5c6a278f..55684b72 100644
+--- a/module/cmd-kick/pom.xml
++++ b/module/cmd-kick/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-kick</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_kick</name>
+diff --git a/module/cmd-list/pom.xml b/module/cmd-list/pom.xml
+index a7f97268..6259c561 100644
+--- a/module/cmd-list/pom.xml
++++ b/module/cmd-list/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-list</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_list</name>
+diff --git a/module/cmd-send/pom.xml b/module/cmd-send/pom.xml
+index bb4d817f..cdc4f020 100644
+--- a/module/cmd-send/pom.xml
++++ b/module/cmd-send/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-send</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_send</name>
+diff --git a/module/cmd-send/src/main/java/net/md_5/bungee/module/cmd/send/CommandSend.java b/module/cmd-send/src/main/java/net/md_5/bungee/module/cmd/send/CommandSend.java
+index 01cab610..6de4b527 100644
+--- a/module/cmd-send/src/main/java/net/md_5/bungee/module/cmd/send/CommandSend.java
++++ b/module/cmd-send/src/main/java/net/md_5/bungee/module/cmd/send/CommandSend.java
+@@ -80,7 +80,7 @@ public class CommandSend extends Command implements TabExecutor
+                 callback.results.get( result ).add( player.getName() );
+                 if ( result == ServerConnectRequest.Result.SUCCESS )
+                 {
+-                    player.sendMessage( ProxyServer.getInstance().getTranslation( "you_got_summoned", target.getName(), callback.sender.getName() ) );
++                    player.sendMessage( ProxyServer.getInstance().getTranslation( "you_got_summoned", callback.sender.getName(), target.getName() ) ); // TubeCord start - Add i18n system
+                 }
+ 
+                 if ( --callback.count == 0 )
+diff --git a/module/cmd-server/pom.xml b/module/cmd-server/pom.xml
+index 78bb6948..bd402c3e 100644
+--- a/module/cmd-server/pom.xml
++++ b/module/cmd-server/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-server</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_server</name>
+diff --git a/module/pom.xml b/module/pom.xml
+index 47e61815..5b08e59d 100644
+--- a/module/pom.xml
++++ b/module/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>pom</packaging>
+ 
+     <name>TubeCord Modules</name>
+diff --git a/module/reconnect-yaml/pom.xml b/module/reconnect-yaml/pom.xml
+index 31f335f4..0386b92e 100644
+--- a/module/reconnect-yaml/pom.xml
++++ b/module/reconnect-yaml/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-reconnect-yaml</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>reconnect_yaml</name>
+diff --git a/native/pom.xml b/native/pom.xml
+index 49a08458..a9624dca 100644
+--- a/native/pom.xml
++++ b/native/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-native</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Native</name>
+diff --git a/pom.xml b/pom.xml
+index 3b5d9cfa..a8f11de9 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -5,7 +5,7 @@
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-parent</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>pom</packaging>
+ 
+     <name>TubeCord-Parent</name>
+diff --git a/protocol/pom.xml b/protocol/pom.xml
+index 71e514db..51d61616 100644
+--- a/protocol/pom.xml
++++ b/protocol/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-protocol</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Protocol</name>
+diff --git a/proxy/pom.xml b/proxy/pom.xml
+index b57d0ac4..63b43a69 100644
+--- a/proxy/pom.xml
++++ b/proxy/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-proxy</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Proxy</name>
+diff --git a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+index d0a5cdec..34d40005 100644
+--- a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
++++ b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+@@ -98,8 +98,11 @@ import net.md_5.bungee.scheduler.BungeeScheduler;
+ import net.md_5.bungee.util.CaseInsensitiveMap;
+ import xyz.tcbuildmc.tubecord.command.CommandHelp;
+ import xyz.tcbuildmc.tubecord.command.CommandServerList;
+-import xyz.tcbuildmc.tubecord.event.ProxyCancelEvent;
+-import xyz.tcbuildmc.tubecord.event.ProxyReadyEvent;
++import xyz.tcbuildmc.tubecord.event.listener.ProxyCancelEvent;
++import xyz.tcbuildmc.tubecord.event.listener.ProxyQueryReadyEvent;
++import xyz.tcbuildmc.tubecord.event.listener.ProxyReadyEvent;
++import xyz.tcbuildmc.tubecord.event.server.ProxyStartEvent;
++import xyz.tcbuildmc.tubecord.event.server.ProxyStopEvent;
+ 
+ /**
+  * Main BungeeCord proxy class.
+@@ -315,6 +318,8 @@ public class BungeeCord extends ProxyServer
+ 
+         isRunning = true;
+ 
++        getPluginManager().callEvent( new ProxyStartEvent( isRunning ) ); // TubeCord - Add more proxy events
++
+         pluginManager.enablePlugins();
+ 
+         if ( config.getThrottle() > 0 )
+@@ -366,7 +371,7 @@ public class BungeeCord extends ProxyServer
+                 @Override
+                 public void operationComplete(ChannelFuture future) throws Exception
+                 {
+-                    getPluginManager().callEvent( new ProxyReadyEvent( ProxyReadyEvent.EventState.SERVER_LISTENER, future.isSuccess() )); // TubeCord - Add more proxy events
++                    getPluginManager().callEvent( new ProxyReadyEvent( future.isSuccess() )); // TubeCord - Add more proxy events
+                     if ( future.isSuccess() )
+                     {
+                         listeners.add( future.channel() );
+@@ -395,7 +400,7 @@ public class BungeeCord extends ProxyServer
+                     @Override
+                     public void operationComplete(ChannelFuture future) throws Exception
+                     {
+-                        getPluginManager().callEvent( new ProxyReadyEvent( ProxyReadyEvent.EventState.QUERY_LISTENER, future.isSuccess() )); // TubeCord - Add more proxy events
++                        getPluginManager().callEvent( new ProxyQueryReadyEvent( future.isSuccess() )); // TubeCord - Add more proxy events
+                         if ( future.isSuccess() )
+                         {
+                             listeners.add( future.channel() );
+@@ -416,15 +421,19 @@ public class BungeeCord extends ProxyServer
+         for ( Channel listener : listeners )
+         {
+             getLogger().log( Level.INFO, "Closing listener {0}", listener );
++
++            boolean success; // TubeCord - Add more proxy events
+             try
+             {
+-                getPluginManager().callEvent( new ProxyCancelEvent( ProxyCancelEvent.EventState.SERVER_LISTENER, true ) ); // TubeCord - Add more proxy events
++                success = true; // TubeCord - Add more proxy events
+                 listener.close().syncUninterruptibly();
+             } catch ( ChannelException ex )
+             {
+-                getPluginManager().callEvent( new ProxyCancelEvent( ProxyCancelEvent.EventState.SERVER_LISTENER , false ) ); // TubeCord - Add more proxy events
++                success = false; // TubeCord - Add more proxy events
+                 getLogger().severe( "Could not close listen thread" );
+             }
++
++            getPluginManager().callEvent( new ProxyCancelEvent( success ) ); // TubeCord - Add more proxy events
+         }
+         listeners.clear();
+     }
+@@ -438,7 +447,6 @@ public class BungeeCord extends ProxyServer
+     @Override
+     public void stop(final String reason)
+     {
+-        getPluginManager().callEvent( new ProxyCancelEvent( ProxyCancelEvent.EventState.SERVER_PROCESS ) ); // TubeCord - Add more proxy events
+         new Thread( "Shutdown Thread" )
+         {
+             @Override
+@@ -454,6 +462,8 @@ public class BungeeCord extends ProxyServer
+     @SuppressWarnings("TooBroadCatch")
+     private void independentThreadStop(final String reason, boolean callSystemExit)
+     {
++        getPluginManager().callEvent( new ProxyStopEvent( callSystemExit ) ); // TubeCord - Add more proxy events
++
+         // Acquire the shutdown lock
+         // This needs to actually block here, otherwise running 'end' and then ctrl+c will cause the thread to terminate prematurely
+         shutdownLock.lock();
+@@ -582,7 +592,24 @@ public class BungeeCord extends ProxyServer
+     {
+         Map<String, Format> cachedFormats = new HashMap<>();
+ 
+-        File file = new File( "messages.properties" );
++        // TubeCord start - Add i18n system
++        String lang = System.getProperty( "tubecord.i18n.lang", "en-us" );
++        String langFileName;
++        switch ( lang ) {
++            case "zh-cn":
++                langFileName = "messages_zh-cn.properties";
++                break;
++//            Not completed
++//            case "zh-tw":
++//            case "zh-hk":
++//                langFileName = "messages_zh-tw.properties";
++            default:
++                langFileName = "messages.properties";
++                break;
++        }
++        // TubeCord end
++
++        File file = new File( langFileName );
+         if ( file.isFile() )
+         {
+             try ( FileReader rd = new FileReader( file ) )
+diff --git a/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java
+index 57e59638..f9c870a5 100644
+--- a/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java
++++ b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java
+@@ -19,7 +19,7 @@ public class CommandServerList extends Command {
+ 
+         builder.append("\n");
+         servers.forEach((String name, ServerInfo info) -> {
+-            builder.append("==============================");
++            builder.append("==============================\n");
+             builder.append(String.format("id: %s\n", name));
+             builder.append(String.format("name: %s\n", info.getName()));
+             builder.append(String.format("player count: %d\n", info.getPlayers().size()));
+diff --git a/proxy/src/main/resources/message_zh-cn.properties b/proxy/src/main/resources/message_zh-cn.properties
+new file mode 100644
+index 00000000..d1717810
+--- /dev/null
++++ b/proxy/src/main/resources/message_zh-cn.properties
+@@ -0,0 +1,44 @@
++alert=\u00a78[\u00a74\u8b66\u62a5\u00a78]\u00a7r 
++already_connected=\u00a7c\u4f60\u5df2\u7ecf\u5728\u8fd9\u4e2a\u5b50\u670d\u52a1\u5668\u4e0a\u4e86\uff01
++already_connected_proxy=\u00a7c\u4f60\u5df2\u7ecf\u5728 TubeCord \u4ee3\u7406\u7aef\u670d\u52a1\u5668\u4e0a\u4e86\uff01
++already_connecting=\u00a7c\u4f60\u5df2\u7ecf\u5728\u8fde\u63a5\u8fd9\u4e2a\u5b50\u670d\u52a1\u5668\u4e86\uff01
++command_list=\u00a7a[{0}] \u00a7e({1}): \u00a7r{2}
++connect_kick=\u00a7c\u4f60\u5728\u8fde\u63a5\u5b50\u670d\u52a1\u5668 {0} \u88ab\u8e22\u51fa\u4e86\uff0c\u539f\u56e0\uff1a{1}
++current_server=\u00a76\u4f60\u5f53\u524d\u5df2\u8fde\u63a5\u5230\u5b50\u670d\u52a1\u5668 {0}\u3002
++fallback_kick=\u00a7c\u4f60\u65e0\u6cd5\u8fde\u63a5\u5230\u9ed8\u8ba4\u8fde\u63a5\u7684\u5b50\u670d\u52a1\u5668\u6216\u56de\u9000\u7684\u5b50\u670d\u52a1\u5668\u3002\u8bf7\u68c0\u67e5\u5b50\u670d\u52a1\u5668\u7684\u5730\u5740/\u7aef\u53e3/\u9632\u706b\u5899\u914d\u7f6e\u4e0d\u6b63\u786e\uff1f {0}
++fallback_lobby=\u00a7c\u4f60\u65e0\u6cd5\u8fde\u63a5\u81f3\u76ee\u6807\u5b50\u670d\u52a1\u5668\uff0c\u4f60\u8fde\u63a5\u5230\u4e86\u56de\u9000\u7684\u5b50\u670d\u52a1\u5668\u3002
++lost_connection=\u00a7cTubeCord \u4ee3\u7406\u7aef\u670d\u52a1\u5668\u4e0e\u5b50\u670d\u52a1\u5668\u4e22\u5931\u4e86\u8fde\u63a5\u3002
++mojang_fail=\u00a7c\u65e0\u6cd5\u8fde\u63a5 Mojang \u7684\u767b\u5f55\u670d\u52a1\u5668\uff0c\u8bf7\u68c0\u67e5\u5b83\u4eec\u662f\u5426\u5b95\u673a\u4e86\u3002
++no_permission=\u00a7c\u4f60\u6ca1\u6709\u6743\u9650\u7528\u8fd9\u4e2a\u547d\u4ee4\uff01
++no_server=\u00a7c\u4f60\u8981\u8fde\u63a5\u7684\u5b50\u670d\u52a1\u5668\u4e0d\u5b58\u5728\u3002
++no_server_permission=\u00a7c\u4f60\u6ca1\u6709\u6743\u9650\u8fdb\u8fd9\u4e2a\u5b50\u670d\u52a1\u5668\uff01
++outdated_client=\u00a7c\u4f60\u7684 Minecraft \u5ba2\u6237\u7aef\u7248\u672c\u592a\u4f4e\u4e86\uff01\u8bf7\u4f7f\u7528 {0}
++outdated_server=\u00a7c\u4f60\u8981\u8fde\u63a5\u7684\u5b50\u670d\u52a1\u5668 Minecraft \u670d\u52a1\u7aef\u7248\u672c\u592a\u4f4e\u4e86\uff01TubeCord \u4ee3\u7406\u670d\u52a1\u7aef\u4ecd\u7136\u662f {0}
++proxy_full=\u00a7cTubeCord \u4ee3\u7406\u670d\u52a1\u7aef\u7684\u73a9\u5bb6\u4e0a\u9650\u6ee1\u4e86\uff01
++restart=\u00a7cTubeCord \u4ee3\u7406\u670d\u52a1\u7aef\u6b63\u5728\u91cd\u542f...
++server_list=\u00a76\u4f60\u6b64\u65f6\u53ef\u4ee5\u8fde\u63a5\u5230\u8fd9\u4e2a\u5b50\u670d\u52a1\u5668\uff1a
++server_went_down=\u00a7c\u4f60\u4e4b\u524d\u6240\u5728\u7684\u670d\u52a1\u5668\u51fa\u73b0\u6545\u969c\uff0c\u4f60\u8fde\u63a5\u5230\u4e86\u56de\u9000\u7684\u5b50\u670d\u52a1\u5668
++total_players=\u5728\u7ebf\u7684\u73a9\u5bb6\u603b\u6570\uff1a{0}
++name_invalid=\u00a7c\u4f60\u7684\u7528\u6237\u540d\u5305\u542b\u975e\u6cd5\u5b57\u7b26\u3002
++ping_cannot_connect=\u00a7c\u65e0\u6cd5 Ping \u5230\u76ee\u6807\u7684\u5b50\u670d\u52a1\u5668\u3002
++offline_mode_player=\u00a7c\u4f60\u4e0d\u662f\u6b63\u7248\u73a9\u5bb6\uff01
++secure_profile_required=\u00a7c\u4f60\u5fc5\u987b\u5177\u6709 Mojang \u7b7e\u540d\u7684\u516c\u94a5\u624d\u80fd\u8fdb\u5165 TubeCord \u4ee3\u7406\u670d\u52a1\u7aef\u3002
++secure_profile_expired=\u00a7c\u4f60\u7684 Mojang \u7b7e\u540d\u7684\u516c\u94a5\u8fc7\u671f\u4e86\uff0c\u8bf7\u91cd\u65b0\u767b\u5f55\u5230 Minecraft\u3002
++secure_profile_invalid=\u00a7c\u4f60\u7684 Mojang \u7b7e\u540d\u7684\u516c\u94a5\u65e0\u6548\uff0c\u8bf7\u91cd\u65b0\u767b\u5f55\u5230 Minecraft\u3002
++secure_profile_unsupported=\u00a7c\u4f60\u7684 Minecraft \u5ba2\u6237\u7aef\u7248\u672c\u592a\u4f4e\u4e86\uff0c\u4e0d\u652f\u6301\u4f7f\u7528 Mojang \u7b7e\u540d\u7684\u516c\u94a5\u3002\u8bf7\u66f4\u65b0\u5230 1.19 \u53ca\u4ee5\u4e0a\u7684 Minecraft \u5ba2\u6237\u7aef\u3002
++message_needed=\u00a7c\u4f60\u5fc5\u987b\u63d0\u4f9b\u8b66\u62a5\u7684\u6d88\u606f\u3002
++error_occurred_player=\u00a7cTubeCord \u4ee3\u7406\u670d\u52a1\u7aef\u5728\u5904\u7406\u548c\u89e3\u6790\u4f60\u8981\u8b66\u62a5\u7684\u6d88\u606f\u65f6\u51fa\u73b0\u4e86\u4e00\u4e2a\u9519\u8bef\u3002\uff08\u628a\u9f20\u6807\u653e\u5728\u6d88\u606f\u4e0a\u9762\u6765\u67e5\u770b\u8be6\u7ec6\u7684\u9519\u8bef\u4fe1\u606f\uff09
++error_occurred_console=\u00a7cTubeCord \u4ee3\u7406\u670d\u52a1\u7aef\u5728\u5904\u7406\u548c\u89e3\u6790\u4f60\u8981\u8b66\u62a5\u7684\u6d88\u606f\u65f6\u51fa\u73b0\u4e86\u4e00\u4e2a\u9519\u8bef\uff1a{0}
++click_to_connect=\u70b9\u51fb\u6765\u8fde\u63a5\u8be5\u5b50\u670d\u52a1\u5668
++username_needed=\u00a7c\u8bf7\u5728\u547d\u4ee4\u540e\u9762\u6dfb\u52a0\u4e00\u4e2a\u73a9\u5bb6\u540d\u5b57\u7684\u53c2\u6570\u3002
++user_not_online=\u00a7c\u90a3\u4e2a\u73a9\u5bb6\u4e0d\u5728\u7ebf\u3002
++user_online_at=\u00a7a{0} \u00a7r\u5728 {1} \u5b50\u670d\u52a1\u5668\u4e0a
++send_cmd_usage=\u00a7c\u53c2\u6570\u4e0d\u591f\uff0c\u7528\u6cd5\uff1a/send <\u5b50\u670d\u52a1\u5668\u540d\u5b57|\u73a9\u5bb6|\u6240\u6709\u73a9\u5bb6|\u4f60\u76ee\u524d\u6240\u5728\u7684\u5b50\u670d\u52a1\u5668> <\u6d88\u606f>
++player_only=\u00a7c\u53ea\u6709\u73a9\u5bb6\u624d\u80fd\u7528\u8fd9\u4e2a\u547d\u4ee4
++you_got_summoned=\u00a76{0} \u7684\u6d88\u606f\u5df2\u7ecf\u53d1\u9001\u5230\u5b50\u670d\u52a1\u5668 {1}
++command_perms_groups=\u00a76\u4f60\u5728\u8fd9\u4e9b\u6743\u9650\u7ec4\u91cc\uff1a{0}
++command_perms_permission=\u00a79- {0}
++command_ip=\u00a79\u73a9\u5bb6 {0} \u7684 IP \u5730\u5740\u662f {1}
++illegal_chat_characters=\u00a7c\u4f60\u7684\u804a\u5929\u6d88\u606f\u91cc\u6709\u975e\u6cd5\u5b57\u7b26\uff08{0}\uff09
++kick_message=\u00a7c\u4f60\u88ab\u8e22\u51fa\u4e86 TubeCord \u4ee3\u7406\u670d\u52a1\u7aef
++reject_transfer=\u00a7c\u4f60\u7684\u8fde\u63a5\u88ab\u62d2\u7edd\u4e86\u3002
+diff --git a/query/pom.xml b/query/pom.xml
+index b7ca0611..9459cd55 100644
+--- a/query/pom.xml
++++ b/query/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-query</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Query</name>
+-- 
+2.34.1
+
