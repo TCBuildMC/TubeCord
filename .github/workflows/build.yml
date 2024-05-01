@@ -52,6 +52,7 @@ jobs:
         with:
           name: TubeCord-${{ env.SHORT_SHA }}
           path: |
+            Waterfall-Proxy/api/target/*.jar
             Waterfall-Proxy/bootstrap/target/TubeCord.jar
             Waterfall-Proxy/module/cmd-alert/target/cmd_alert.jar
             Waterfall-Proxy/module/cmd-find/target/cmd_find.jar

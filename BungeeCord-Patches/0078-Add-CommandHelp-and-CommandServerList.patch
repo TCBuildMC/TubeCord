@@ -1,0 +1,226 @@
+From 0827e9b3d3a6ab80a87e877b1706c8a871f63d25 Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Wed, 1 May 2024 11:35:28 +0800
+Subject: [PATCH] Add CommandHelp and CommandServerList
+
+
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStopEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyCancelEvent.java
+similarity index 78%
+rename from api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStopEvent.java
+rename to api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyCancelEvent.java
+index b7664b73..39fe5940 100644
+--- a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStopEvent.java
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyCancelEvent.java
+@@ -11,17 +11,17 @@ import net.md_5.bungee.api.plugin.Event;
+ @Data
+ @ToString(callSuper = false)
+ @EqualsAndHashCode(callSuper = false)
+-public class ProxyStopEvent extends Event {
++public class ProxyCancelEvent extends Event {
+     private final EventState state;
+     private final boolean success;
+ 
+-    public ProxyStopEvent(EventState state, boolean success) {
++    public ProxyCancelEvent(EventState state, boolean success) {
+         super();
+         this.state = state;
+         this.success = success;
+     }
+ 
+-    public ProxyStopEvent(EventState state) {
++    public ProxyCancelEvent(EventState state) {
+         this(state, true);
+     }
+ 
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStartEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyReadyEvent.java
+similarity index 76%
+rename from api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStartEvent.java
+rename to api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyReadyEvent.java
+index c444e41e..389c4cdc 100644
+--- a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStartEvent.java
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyReadyEvent.java
+@@ -8,17 +8,17 @@ import net.md_5.bungee.api.plugin.Event;
+ @Data
+ @ToString(callSuper = false)
+ @EqualsAndHashCode(callSuper = false)
+-public class ProxyStartEvent extends Event {
++public class ProxyReadyEvent extends Event {
+     private final EventState state;
+     private final boolean success;
+ 
+-    public ProxyStartEvent(EventState state, boolean success) {
++    public ProxyReadyEvent(EventState state, boolean success) {
+         super();
+         this.state = state;
+         this.success = success;
+     }
+ 
+-    public ProxyStartEvent(EventState state) {
++    public ProxyReadyEvent(EventState state) {
+         this(state, true);
+     }
+ 
+diff --git a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+index ec6eb5d2..d0a5cdec 100644
+--- a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
++++ b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+@@ -96,8 +96,10 @@ import net.md_5.bungee.protocol.packet.PluginMessage;
+ import net.md_5.bungee.query.RemoteQuery;
+ import net.md_5.bungee.scheduler.BungeeScheduler;
+ import net.md_5.bungee.util.CaseInsensitiveMap;
+-import xyz.tcbuildmc.tubecord.event.ProxyStartEvent;
+-import xyz.tcbuildmc.tubecord.event.ProxyStopEvent;
++import xyz.tcbuildmc.tubecord.command.CommandHelp;
++import xyz.tcbuildmc.tubecord.command.CommandServerList;
++import xyz.tcbuildmc.tubecord.event.ProxyCancelEvent;
++import xyz.tcbuildmc.tubecord.event.ProxyReadyEvent;
+ 
+ /**
+  * Main BungeeCord proxy class.
+@@ -252,6 +254,11 @@ public class BungeeCord extends ProxyServer
+         getPluginManager().registerCommand( null, new CommandBungee() );
+         getPluginManager().registerCommand( null, new CommandPerms() );
+ 
++        // TubeCord start - Add proxyhelp and proxyserverlist command
++        getPluginManager().registerCommand( null, new CommandHelp() );
++        getPluginManager().registerCommand( null, new CommandServerList() );
++        // TubeCord end
++
+         if ( !Boolean.getBoolean( "net.md_5.bungee.native.disable" ) )
+         {
+             if ( EncryptionUtil.nativeFactory.load() )
+@@ -359,7 +366,7 @@ public class BungeeCord extends ProxyServer
+                 @Override
+                 public void operationComplete(ChannelFuture future) throws Exception
+                 {
+-                    getPluginManager().callEvent( new ProxyStartEvent( ProxyStartEvent.EventState.SERVER_LISTENER, future.isSuccess() )); // TubeCord - Add more proxy events
++                    getPluginManager().callEvent( new ProxyReadyEvent( ProxyReadyEvent.EventState.SERVER_LISTENER, future.isSuccess() )); // TubeCord - Add more proxy events
+                     if ( future.isSuccess() )
+                     {
+                         listeners.add( future.channel() );
+@@ -388,7 +395,7 @@ public class BungeeCord extends ProxyServer
+                     @Override
+                     public void operationComplete(ChannelFuture future) throws Exception
+                     {
+-                        getPluginManager().callEvent( new ProxyStartEvent( ProxyStartEvent.EventState.QUERY_LISTENER, future.isSuccess() )); // TubeCord - Add more proxy events
++                        getPluginManager().callEvent( new ProxyReadyEvent( ProxyReadyEvent.EventState.QUERY_LISTENER, future.isSuccess() )); // TubeCord - Add more proxy events
+                         if ( future.isSuccess() )
+                         {
+                             listeners.add( future.channel() );
+@@ -411,11 +418,11 @@ public class BungeeCord extends ProxyServer
+             getLogger().log( Level.INFO, "Closing listener {0}", listener );
+             try
+             {
+-                getPluginManager().callEvent( new ProxyStopEvent( ProxyStopEvent.EventState.SERVER_LISTENER, true ) ); // TubeCord - Add more proxy events
++                getPluginManager().callEvent( new ProxyCancelEvent( ProxyCancelEvent.EventState.SERVER_LISTENER, true ) ); // TubeCord - Add more proxy events
+                 listener.close().syncUninterruptibly();
+             } catch ( ChannelException ex )
+             {
+-                getPluginManager().callEvent( new ProxyStopEvent( ProxyStopEvent.EventState.SERVER_LISTENER , false ) ); // TubeCord - Add more proxy events
++                getPluginManager().callEvent( new ProxyCancelEvent( ProxyCancelEvent.EventState.SERVER_LISTENER , false ) ); // TubeCord - Add more proxy events
+                 getLogger().severe( "Could not close listen thread" );
+             }
+         }
+@@ -431,7 +438,7 @@ public class BungeeCord extends ProxyServer
+     @Override
+     public void stop(final String reason)
+     {
+-        getPluginManager().callEvent( new ProxyStopEvent( ProxyStopEvent.EventState.SERVER_PROCESS ) ); // TubeCord - Add more proxy events
++        getPluginManager().callEvent( new ProxyCancelEvent( ProxyCancelEvent.EventState.SERVER_PROCESS ) ); // TubeCord - Add more proxy events
+         new Thread( "Shutdown Thread" )
+         {
+             @Override
+diff --git a/proxy/src/main/java/net/md_5/bungee/command/CommandIP.java b/proxy/src/main/java/net/md_5/bungee/command/CommandIP.java
+index beba1fa7..b1e37da6 100644
+--- a/proxy/src/main/java/net/md_5/bungee/command/CommandIP.java
++++ b/proxy/src/main/java/net/md_5/bungee/command/CommandIP.java
+@@ -12,7 +12,7 @@ public class CommandIP extends PlayerCommand
+ 
+     public CommandIP()
+     {
+-        super( "ip", "bungeecord.command.ip" );
++        super( "playerip", "bungeecord.command.ip" ); // TubeCord - Add proxyhelp and proxyserverlist command
+     }
+ 
+     @Override
+diff --git a/proxy/src/main/java/net/md_5/bungee/command/CommandPerms.java b/proxy/src/main/java/net/md_5/bungee/command/CommandPerms.java
+index 18422669..8db96bd2 100644
+--- a/proxy/src/main/java/net/md_5/bungee/command/CommandPerms.java
++++ b/proxy/src/main/java/net/md_5/bungee/command/CommandPerms.java
+@@ -12,7 +12,7 @@ public class CommandPerms extends Command
+ 
+     public CommandPerms()
+     {
+-        super( "perms" );
++        super( "proxyperms" ); // TubeCord - Add proxyhelp and proxyserverlist command
+     }
+ 
+     @Override
+diff --git a/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandHelp.java b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandHelp.java
+new file mode 100644
+index 00000000..2c161eed
+--- /dev/null
++++ b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandHelp.java
+@@ -0,0 +1,16 @@
++package xyz.tcbuildmc.tubecord.command;
++
++import net.md_5.bungee.api.ChatColor;
++import net.md_5.bungee.api.CommandSender;
++import net.md_5.bungee.api.plugin.Command;
++
++public class CommandHelp extends Command {
++    public CommandHelp() {
++        super("proxyhelp");
++    }
++
++    @Override
++    public void execute(CommandSender sender, String[] args) {
++        sender.sendMessage(ChatColor.GOLD + "See our GitHub wiki: https://github.com/TCBuildMC/TubeCord/wiki");
++    }
++}
+diff --git a/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java
+new file mode 100644
+index 00000000..daa5bd29
+--- /dev/null
++++ b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java
+@@ -0,0 +1,37 @@
++package xyz.tcbuildmc.tubecord.command;
++
++import net.md_5.bungee.BungeeCord;
++import net.md_5.bungee.api.CommandSender;
++import net.md_5.bungee.api.config.ServerInfo;
++import net.md_5.bungee.api.plugin.Command;
++
++import java.util.Map;
++
++public class CommandServerList extends Command {
++    public CommandServerList() {
++        super("gameserverlist");
++    }
++
++    @Override
++    public void execute(CommandSender sender, String[] args) {
++        Map<String, ServerInfo> servers = BungeeCord.getInstance().getServers();
++        StringBuilder builder = new StringBuilder(String.format("There are %s servers in this proxy.", servers.size()));
++
++        builder.append("\n");
++        servers.forEach((String name, ServerInfo info) -> {
++            builder.append("==============================");
++            builder.append(String.format("id: %s\n", name));
++            builder.append(String.format("name: %s\n", info.getName()));
++            builder.append(String.format("player count: %d\n", info.getPlayers().size()));
++            builder.append(String.format("motd: %s\n", info.getMotd()));
++
++            if (info.isRestricted()) {
++                builder.append(String.format("restrict join: %b\n", info.isRestricted()));
++                builder.append(String.format("join perm: %s\n", info.getPermission()));
++                builder.append(String.format("whether you can join: %b\n", info.canAccess(sender)));
++            }
++        });
++
++        sender.sendMessage(builder.toString());
++    }
++}
+-- 
+2.34.1
+
