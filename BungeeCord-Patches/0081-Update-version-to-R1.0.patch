@@ -1,0 +1,427 @@
+From dafb4f16e81acdfbe2aeff20f57f0273feaebb8c Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Thu, 2 May 2024 18:03:23 +0800
+Subject: [PATCH] Update version to R1.0
+
+
+diff --git a/api/pom.xml b/api/pom.xml
+index d37df945..b950102d 100644
+--- a/api/pom.xml
++++ b/api/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-api</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-API</name>
+diff --git a/bootstrap/pom.xml b/bootstrap/pom.xml
+index 1287a576..7b5dbd0a 100644
+--- a/bootstrap/pom.xml
++++ b/bootstrap/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-bootstrap</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Bootstrap</name>
+diff --git a/chat/pom.xml b/chat/pom.xml
+index 4aa20cc2..7622fc01 100644
+--- a/chat/pom.xml
++++ b/chat/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-chat</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Chat</name>
+diff --git a/config/pom.xml b/config/pom.xml
+index a7ff978e..1b76cef5 100644
+--- a/config/pom.xml
++++ b/config/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-config</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Config</name>
+diff --git a/event/pom.xml b/event/pom.xml
+index bef0071e..091f769d 100644
+--- a/event/pom.xml
++++ b/event/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-event</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Event</name>
+diff --git a/log/pom.xml b/log/pom.xml
+index 6fb00a1a..890af0c0 100644
+--- a/log/pom.xml
++++ b/log/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-log</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Log</name>
+diff --git a/log4j/pom.xml b/log4j/pom.xml
+index df900996..c4693fcb 100644
+--- a/log4j/pom.xml
++++ b/log4j/pom.xml
+@@ -5,13 +5,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-log4j</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Log4J</name>
+diff --git a/module/cmd-alert/pom.xml b/module/cmd-alert/pom.xml
+index cb868105..75d4b30c 100644
+--- a/module/cmd-alert/pom.xml
++++ b/module/cmd-alert/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-alert</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_alert</name>
+diff --git a/module/cmd-find/pom.xml b/module/cmd-find/pom.xml
+index 72b404fa..ed10c6e4 100644
+--- a/module/cmd-find/pom.xml
++++ b/module/cmd-find/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-find</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_find</name>
+diff --git a/module/cmd-kick/pom.xml b/module/cmd-kick/pom.xml
+index 5c6a278f..55684b72 100644
+--- a/module/cmd-kick/pom.xml
++++ b/module/cmd-kick/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-kick</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_kick</name>
+diff --git a/module/cmd-list/pom.xml b/module/cmd-list/pom.xml
+index a7f97268..6259c561 100644
+--- a/module/cmd-list/pom.xml
++++ b/module/cmd-list/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-list</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_list</name>
+diff --git a/module/cmd-send/pom.xml b/module/cmd-send/pom.xml
+index bb4d817f..cdc4f020 100644
+--- a/module/cmd-send/pom.xml
++++ b/module/cmd-send/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-send</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_send</name>
+diff --git a/module/cmd-server/pom.xml b/module/cmd-server/pom.xml
+index 78bb6948..bd402c3e 100644
+--- a/module/cmd-server/pom.xml
++++ b/module/cmd-server/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-cmd-server</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>cmd_server</name>
+diff --git a/module/pom.xml b/module/pom.xml
+index 47e61815..5b08e59d 100644
+--- a/module/pom.xml
++++ b/module/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>pom</packaging>
+ 
+     <name>TubeCord Modules</name>
+diff --git a/module/reconnect-yaml/pom.xml b/module/reconnect-yaml/pom.xml
+index 31f335f4..0386b92e 100644
+--- a/module/reconnect-yaml/pom.xml
++++ b/module/reconnect-yaml/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-module</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-module-reconnect-yaml</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>reconnect_yaml</name>
+diff --git a/native/pom.xml b/native/pom.xml
+index 49a08458..a9624dca 100644
+--- a/native/pom.xml
++++ b/native/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-native</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Native</name>
+diff --git a/pom.xml b/pom.xml
+index 3b5d9cfa..a8f11de9 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -5,7 +5,7 @@
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-parent</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>pom</packaging>
+ 
+     <name>TubeCord-Parent</name>
+diff --git a/protocol/pom.xml b/protocol/pom.xml
+index 71e514db..51d61616 100644
+--- a/protocol/pom.xml
++++ b/protocol/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-protocol</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Protocol</name>
+diff --git a/proxy/pom.xml b/proxy/pom.xml
+index b57d0ac4..63b43a69 100644
+--- a/proxy/pom.xml
++++ b/proxy/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-proxy</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Proxy</name>
+diff --git a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+index 2ce105c3..20954939 100644
+--- a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
++++ b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+@@ -96,6 +96,8 @@ import net.md_5.bungee.protocol.packet.PluginMessage;
+ import net.md_5.bungee.query.RemoteQuery;
+ import net.md_5.bungee.scheduler.BungeeScheduler;
+ import net.md_5.bungee.util.CaseInsensitiveMap;
++import xyz.tcbuildmc.tubecord.command.CommandHelp;
++import xyz.tcbuildmc.tubecord.command.CommandServerList;
+ import xyz.tcbuildmc.tubecord.event.forge.ForgeSupportEnableEvent;
+ import xyz.tcbuildmc.tubecord.event.listener.ProxyCancelEvent;
+ import xyz.tcbuildmc.tubecord.event.listener.ProxyQueryReadyEvent;
+@@ -248,6 +250,11 @@ public class BungeeCord extends ProxyServer
+         getPluginManager().registerCommand( null, new CommandBungee() );
+         getPluginManager().registerCommand( null, new CommandPerms() );
+ 
++        // TubeCord start - register commands
++        getPluginManager().registerCommand( null, new CommandHelp() );
++        getPluginManager().registerCommand( null, new CommandServerList() );
++        // TubeCord end
++
+         if ( !Boolean.getBoolean( "net.md_5.bungee.native.disable" ) )
+         {
+             if ( EncryptionUtil.nativeFactory.load() )
+diff --git a/query/pom.xml b/query/pom.xml
+index b7ca0611..9459cd55 100644
+--- a/query/pom.xml
++++ b/query/pom.xml
+@@ -6,13 +6,13 @@
+     <parent>
+         <groupId>xyz.tcbuildmc.tubecord</groupId>
+         <artifactId>tubecord-parent</artifactId>
+-        <version>1.20-R0.3-SNAPSHOT</version>
++        <version>1.20-R1.0-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <groupId>xyz.tcbuildmc.tubecord</groupId>
+     <artifactId>tubecord-query</artifactId>
+-    <version>1.20-R0.3-SNAPSHOT</version>
++    <version>1.20-R1.0-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+     <name>TubeCord-Query</name>
+-- 
+2.34.1
+
