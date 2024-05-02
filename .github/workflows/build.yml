@@ -66,7 +66,6 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         uses: softprops/action-gh-release@v2
         with:
-          prerelease: true
           files: |
             Waterfall-Proxy/bootstrap/target/TubeCord.jar
             Waterfall-Proxy/module/cmd-alert/target/cmd_alert.jar

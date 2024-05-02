@@ -37,40 +37,25 @@ Waterfall requires **Java 8** or above.
 ------
  * See our API patches [here](BungeeCord-Patches)
  * Waterfall API JavaDocs here: [papermc.io/javadocs](https://jd.papermc.io/waterfall/1.20)
- * Maven repository (for `waterfall-api`):
-```xml
-<repository>
-    <id>jitpack</id>
-    <url>https://jitpack.io/</url>
-</repository>
-```
- * Artifact information:
-```xml
-<dependency>
-    <groupId>com.github.TCBuildMC.TubeCord</groupId>
-    <artifactId>tubecord-api</artifactId>
-    <version>commit</version>
-    <scope>provided</scope>
-</dependency>
- ```
-
-**Or alternatively, with Gradle:**
-
+ * We recommend you to use Gradle instead of Maven. Because if you use Maven, you will configure more things and it is mess.
  * Repository:
 ```groovy
 repositories {
     maven {
-        name = "jitpack"
-        url = "https://jitpack.io/"
+        name = "TCBuild Releases"
+        url = "https://raw.github.com/TCBuildMC/MavenRepository/releases/"
     }
 }
 ```
+
  * Artifact:
 ```groovy
 dependencies {
-    compileOnly "com.github.TCBuildMC.TubeCord:tubecord-api:<commit>"
+    compileOnly "xyz.tcbuildmc.tubecord:tubecord-api:1.20-R1.0-SNAPSHOT"
 }
 ```
+
+ * You can also see [our test plugin](https://github.com/TCBuildMC/TubeCord-TestPlugin/) for example.
 
 ## How To (Compiling From Source)
 
