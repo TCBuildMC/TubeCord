@@ -1,0 +1,27 @@
+From b3fcf69c0d027fd8797111273d5a753198145253 Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Thu, 2 May 2024 00:29:20 +0800
+Subject: [PATCH] Fix command arguments crash
+
+
+diff --git a/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java b/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
+index 31e106f2..b17d1d35 100644
+--- a/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
++++ b/protocol/src/main/java/net/md_5/bungee/protocol/packet/Commands.java
+@@ -974,7 +974,12 @@ public class Commands extends DefinedPacket
+                 reader = PROVIDERS.get( (String) key );
+             }
+ 
+-            Preconditions.checkArgument( reader != null, "No provider for argument " +  key );
++            // TubeCord start - Add Mohist support
++            // Added this to prevent some mod's super special command argument break the whole server
++            if ( reader == null ) {
++                reader = VOID;
++            }
++            // TubeCord end
+ 
+             Object val = reader.read( buf, protocolVersion ); // TubeCord - Add modern forge support (via lightfall) // lightfall - use protocol version
+             return val != null && PROPER_PROVIDERS.containsKey( val.getClass() ) ? (ArgumentType<?>) val : new DummyType( key, reader, val );
+-- 
+2.34.1
+
