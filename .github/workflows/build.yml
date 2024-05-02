@@ -29,8 +29,8 @@ jobs:
 
       - name: Configure git
         run: |
-          git config --global user.email "no-reply@github.com"
           git config --global user.name "Github Actions"
+          git config --global user.email "no-reply@github.com"
 
       - name: Update upstream
         run: |
@@ -53,7 +53,6 @@ jobs:
         with:
           name: TubeCord-${{ env.SHORT_SHA }}
           path: |
-            Waterfall-Proxy/api/target/*.jar
             Waterfall-Proxy/bootstrap/target/TubeCord.jar
             Waterfall-Proxy/module/cmd-alert/target/cmd_alert.jar
             Waterfall-Proxy/module/cmd-find/target/cmd_find.jar
@@ -62,3 +61,24 @@ jobs:
             Waterfall-Proxy/module/cmd-send/target/cmd_send.jar
             Waterfall-Proxy/module/cmd-server/target/cmd_server.jar
             Waterfall-Proxy/module/reconnect-yaml/target/reconnect_yaml.jar
+
+      - name: Upload GitHub Release
+        if: ${{ github.event_name == 'push' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          files: |
+            Waterfall-Proxy/bootstrap/target/TubeCord.jar
+            Waterfall-Proxy/module/cmd-alert/target/cmd_alert.jar
+            Waterfall-Proxy/module/cmd-find/target/cmd_find.jar
+            Waterfall-Proxy/module/cmd-kick/target/cmd_kick.jar
+            Waterfall-Proxy/module/cmd-list/target/cmd_list.jar
+            Waterfall-Proxy/module/cmd-send/target/cmd_send.jar
+            Waterfall-Proxy/module/cmd-server/target/cmd_server.jar
+            Waterfall-Proxy/module/reconnect-yaml/target/reconnect_yaml.jar
+          name: "TubeCord-${{ env.SHORT_SHA }}-build${{ github.run_number }}"
+          tag_name: R1.0-${{ env.SHORT_SHA }}
+          target_commitish:  ${{ github.event.ref }}
+          generate_release_notes: true
+          make_latest: true
+          token: ${{ secrets.RELEASE_TOKEN }}

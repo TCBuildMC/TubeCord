@@ -1,7 +1,7 @@
 # TubeCord
 A fork of Waterfall with more support and new features.
 
-Origin README: 
+Origin README (With Modifies of usage): 
 
 Waterfall
 =========
@@ -40,16 +40,16 @@ Waterfall requires **Java 8** or above.
  * Maven repository (for `waterfall-api`):
 ```xml
 <repository>
-    <id>papermc</id>
-    <url>https://repo.papermc.io/repository/maven-public/</url>
+    <id>jitpack</id>
+    <url>https://jitpack.io/</url>
 </repository>
 ```
  * Artifact information:
 ```xml
 <dependency>
-    <groupId>io.github.waterfallmc</groupId>
-    <artifactId>waterfall-api</artifactId>
-    <version>1.20-R0.3-SNAPSHOT</version>
+    <groupId>com.github.TCBuildMC.TubeCord</groupId>
+    <artifactId>tubecord-api</artifactId>
+    <version>commit</version>
     <scope>provided</scope>
 </dependency>
  ```
@@ -60,14 +60,15 @@ Waterfall requires **Java 8** or above.
 ```groovy
 repositories {
     maven {
-        url 'https://repo.papermc.io/repository/maven-public/'
+        name = "jitpack"
+        url = "https://jitpack.io/"
     }
 }
 ```
  * Artifact:
 ```groovy
 dependencies {
-    compileOnly 'io.github.waterfallmc:waterfall-api:1.20-R0.3-SNAPSHOT'
+    compileOnly "com.github.TCBuildMC.TubeCord:tubecord-api:<commit>"
 }
 ```
 
