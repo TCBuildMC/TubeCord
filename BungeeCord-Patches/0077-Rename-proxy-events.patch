@@ -1,0 +1,331 @@
+From 6cc8d71a89e8bb8f42118051cd62582606677262 Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Wed, 1 May 2024 22:52:31 +0800
+Subject: [PATCH] Rename proxy events
+
+
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStartEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStartEvent.java
+deleted file mode 100644
+index c444e41e..00000000
+--- a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStartEvent.java
++++ /dev/null
+@@ -1,29 +0,0 @@
+-package xyz.tcbuildmc.tubecord.event;
+-
+-import lombok.Data;
+-import lombok.EqualsAndHashCode;
+-import lombok.ToString;
+-import net.md_5.bungee.api.plugin.Event;
+-
+-@Data
+-@ToString(callSuper = false)
+-@EqualsAndHashCode(callSuper = false)
+-public class ProxyStartEvent extends Event {
+-    private final EventState state;
+-    private final boolean success;
+-
+-    public ProxyStartEvent(EventState state, boolean success) {
+-        super();
+-        this.state = state;
+-        this.success = success;
+-    }
+-
+-    public ProxyStartEvent(EventState state) {
+-        this(state, true);
+-    }
+-
+-    public enum EventState {
+-        SERVER_LISTENER,
+-        QUERY_LISTENER
+-    }
+-}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStopEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStopEvent.java
+deleted file mode 100644
+index b7664b73..00000000
+--- a/api/src/main/java/xyz/tcbuildmc/tubecord/event/ProxyStopEvent.java
++++ /dev/null
+@@ -1,32 +0,0 @@
+-package xyz.tcbuildmc.tubecord.event;
+-
+-import lombok.Data;
+-import lombok.EqualsAndHashCode;
+-import lombok.ToString;
+-import net.md_5.bungee.api.plugin.Event;
+-
+-/**
+- * Call when proxy server cancelled. (Before plugins disabled)
+- */
+-@Data
+-@ToString(callSuper = false)
+-@EqualsAndHashCode(callSuper = false)
+-public class ProxyStopEvent extends Event {
+-    private final EventState state;
+-    private final boolean success;
+-
+-    public ProxyStopEvent(EventState state, boolean success) {
+-        super();
+-        this.state = state;
+-        this.success = success;
+-    }
+-
+-    public ProxyStopEvent(EventState state) {
+-        this(state, true);
+-    }
+-
+-    public enum EventState {
+-        SERVER_LISTENER,
+-        SERVER_PROCESS
+-    }
+-}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/forge/ForgeSupportEnableEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/forge/ForgeSupportEnableEvent.java
+new file mode 100644
+index 00000000..c98ce2b9
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/forge/ForgeSupportEnableEvent.java
+@@ -0,0 +1,22 @@
++package xyz.tcbuildmc.tubecord.event.forge;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++import java.util.Collection;
++
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ForgeSupportEnableEvent extends Event {
++    private final boolean forgeSupport;
++    private final Collection<String> pluginChannels;
++
++    public ForgeSupportEnableEvent(boolean forgeSupport, Collection<String> pluginChannels) {
++        super();
++        this.forgeSupport = forgeSupport;
++        this.pluginChannels = pluginChannels;
++    }
++}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyCancelEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyCancelEvent.java
+new file mode 100644
+index 00000000..5d921edb
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyCancelEvent.java
+@@ -0,0 +1,21 @@
++package xyz.tcbuildmc.tubecord.event.listener;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server listener cancelled.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyCancelEvent extends Event {
++    private final boolean success;
++
++    public ProxyCancelEvent(boolean success) {
++        super();
++        this.success = success;
++    }
++}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyQueryReadyEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyQueryReadyEvent.java
+new file mode 100644
+index 00000000..0e3f3809
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyQueryReadyEvent.java
+@@ -0,0 +1,21 @@
++package xyz.tcbuildmc.tubecord.event.listener;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server query listener is ready.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyQueryReadyEvent extends Event {
++    private final boolean success;
++
++    public ProxyQueryReadyEvent(boolean success) {
++        super();
++        this.success = success;
++    }
++}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyReadyEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyReadyEvent.java
+new file mode 100644
+index 00000000..0398d235
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/listener/ProxyReadyEvent.java
+@@ -0,0 +1,21 @@
++package xyz.tcbuildmc.tubecord.event.listener;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server listener is ready.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyReadyEvent extends Event {
++    private final boolean success;
++
++    public ProxyReadyEvent(boolean success) {
++        super();
++        this.success = success;
++    }
++}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyInitializeEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyInitializeEvent.java
+new file mode 100644
+index 00000000..a3e4d871
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyInitializeEvent.java
+@@ -0,0 +1,15 @@
++package xyz.tcbuildmc.tubecord.event.server;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server is initializing.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyInitializeEvent extends Event {
++}
+diff --git a/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyShutdownEvent.java b/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyShutdownEvent.java
+new file mode 100644
+index 00000000..dfdbff45
+--- /dev/null
++++ b/api/src/main/java/xyz/tcbuildmc/tubecord/event/server/ProxyShutdownEvent.java
+@@ -0,0 +1,21 @@
++package xyz.tcbuildmc.tubecord.event.server;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Call when proxy server is shutting down.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ProxyShutdownEvent extends Event {
++    private final boolean systemExit;
++
++    public ProxyShutdownEvent(boolean systemExit) {
++        super();
++        this.systemExit = systemExit;
++    }
++}
+diff --git a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+index 7b88984a..53de4389 100644
+--- a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
++++ b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+@@ -96,8 +96,12 @@ import net.md_5.bungee.protocol.packet.PluginMessage;
+ import net.md_5.bungee.query.RemoteQuery;
+ import net.md_5.bungee.scheduler.BungeeScheduler;
+ import net.md_5.bungee.util.CaseInsensitiveMap;
+-import xyz.tcbuildmc.tubecord.event.ProxyStartEvent;
+-import xyz.tcbuildmc.tubecord.event.ProxyStopEvent;
++import xyz.tcbuildmc.tubecord.event.forge.ForgeSupportEnableEvent;
++import xyz.tcbuildmc.tubecord.event.listener.ProxyCancelEvent;
++import xyz.tcbuildmc.tubecord.event.listener.ProxyQueryReadyEvent;
++import xyz.tcbuildmc.tubecord.event.listener.ProxyReadyEvent;
++import xyz.tcbuildmc.tubecord.event.server.ProxyInitializeEvent;
++import xyz.tcbuildmc.tubecord.event.server.ProxyShutdownEvent;
+ 
+ /**
+  * Main BungeeCord proxy class.
+@@ -291,12 +295,15 @@ public class BungeeCord extends ProxyServer
+         pluginManager.loadPlugins();
+         config.load();
+ 
++        getPluginManager().callEvent( new ProxyInitializeEvent() ); // TubeCord - Rename proxy events
++
+         if ( config.isForgeSupport() )
+         {
+             registerChannel( ForgeConstants.FML_TAG );
+             registerChannel( ForgeConstants.FML_HANDSHAKE_TAG );
+             registerChannel( ForgeConstants.FORGE_REGISTER );
+         }
++        getPluginManager().callEvent( new ForgeSupportEnableEvent( config.isForgeSupport(), pluginChannels ) ); // TubeCord - Rename proxy events
+ 
+         isRunning = true;
+ 
+@@ -351,7 +358,7 @@ public class BungeeCord extends ProxyServer
+                 @Override
+                 public void operationComplete(ChannelFuture future) throws Exception
+                 {
+-                    getPluginManager().callEvent( new ProxyStartEvent( ProxyStartEvent.EventState.SERVER_LISTENER, future.isSuccess() )); // TubeCord - Add more proxy events
++                    getPluginManager().callEvent( new ProxyReadyEvent( future.isSuccess() ) ); // TubeCord - Rename proxy events
+                     if ( future.isSuccess() )
+                     {
+                         listeners.add( future.channel() );
+@@ -380,7 +387,7 @@ public class BungeeCord extends ProxyServer
+                     @Override
+                     public void operationComplete(ChannelFuture future) throws Exception
+                     {
+-                        getPluginManager().callEvent( new ProxyStartEvent( ProxyStartEvent.EventState.QUERY_LISTENER, future.isSuccess() )); // TubeCord - Add more proxy events
++                        getPluginManager().callEvent( new ProxyQueryReadyEvent( future.isSuccess() )); // TubeCord - Rename proxy events
+                         if ( future.isSuccess() )
+                         {
+                             listeners.add( future.channel() );
+@@ -401,15 +408,19 @@ public class BungeeCord extends ProxyServer
+         for ( Channel listener : listeners )
+         {
+             getLogger().log( Level.INFO, "Closing listener {0}", listener );
++
++            boolean success; // TubeCord - Rename proxy events
+             try
+             {
+-                getPluginManager().callEvent( new ProxyStopEvent( ProxyStopEvent.EventState.SERVER_LISTENER, true ) ); // TubeCord - Add more proxy events
++                success = true; // TubeCord - Rename proxy events
+                 listener.close().syncUninterruptibly();
+             } catch ( ChannelException ex )
+             {
+-                getPluginManager().callEvent( new ProxyStopEvent( ProxyStopEvent.EventState.SERVER_LISTENER , false ) ); // TubeCord - Add more proxy events
++                success = false; // TubeCord - Rename proxy events
+                 getLogger().severe( "Could not close listen thread" );
+             }
++
++            getPluginManager().callEvent( new ProxyCancelEvent(success) );  // TubeCord - Rename proxy events
+         }
+         listeners.clear();
+     }
+@@ -423,7 +434,6 @@ public class BungeeCord extends ProxyServer
+     @Override
+     public void stop(final String reason)
+     {
+-        getPluginManager().callEvent( new ProxyStopEvent( ProxyStopEvent.EventState.SERVER_PROCESS ) ); // TubeCord - Add more proxy events
+         new Thread( "Shutdown Thread" )
+         {
+             @Override
+@@ -439,6 +449,8 @@ public class BungeeCord extends ProxyServer
+     @SuppressWarnings("TooBroadCatch")
+     private void independentThreadStop(final String reason, boolean callSystemExit)
+     {
++        getPluginManager().callEvent( new ProxyShutdownEvent( callSystemExit ) ); // TubeCord - Rename proxy events
++
+         // Acquire the shutdown lock
+         // This needs to actually block here, otherwise running 'end' and then ctrl+c will cause the thread to terminate prematurely
+         shutdownLock.lock();
+-- 
+2.34.1
+

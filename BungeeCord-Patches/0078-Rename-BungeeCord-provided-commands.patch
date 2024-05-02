@@ -1,0 +1,127 @@
+From c47a6c8e93fb563304c5fca89eee99e68433599b Mon Sep 17 00:00:00 2001
+From: Block_Mrlimr267 <113236317+erha134@users.noreply.github.com>
+Date: Wed, 1 May 2024 23:42:01 +0800
+Subject: [PATCH] Rename BungeeCord provided commands
+
+
+diff --git a/module/cmd-find/src/main/java/net/md_5/bungee/module/cmd/find/CommandFind.java b/module/cmd-find/src/main/java/net/md_5/bungee/module/cmd/find/CommandFind.java
+index 912cb0c2..7dae50ba 100644
+--- a/module/cmd-find/src/main/java/net/md_5/bungee/module/cmd/find/CommandFind.java
++++ b/module/cmd-find/src/main/java/net/md_5/bungee/module/cmd/find/CommandFind.java
+@@ -15,7 +15,7 @@ public class CommandFind extends PlayerCommand
+ 
+     public CommandFind()
+     {
+-        super( "find", "bungeecord.command.find" );
++        super( "findplayer", "bungeecord.command.find" ); // TubeCord - Rename BungeeCord provided commands
+     }
+ 
+     @Override
+diff --git a/proxy/src/main/java/net/md_5/bungee/command/CommandIP.java b/proxy/src/main/java/net/md_5/bungee/command/CommandIP.java
+index beba1fa7..11e7b4fa 100644
+--- a/proxy/src/main/java/net/md_5/bungee/command/CommandIP.java
++++ b/proxy/src/main/java/net/md_5/bungee/command/CommandIP.java
+@@ -12,7 +12,7 @@ public class CommandIP extends PlayerCommand
+ 
+     public CommandIP()
+     {
+-        super( "ip", "bungeecord.command.ip" );
++        super( "playerip", "bungeecord.command.ip" ); // TubeCord - Rename BungeeCord provided commands
+     }
+ 
+     @Override
+diff --git a/proxy/src/main/java/net/md_5/bungee/command/CommandPerms.java b/proxy/src/main/java/net/md_5/bungee/command/CommandPerms.java
+index 18422669..11293ef7 100644
+--- a/proxy/src/main/java/net/md_5/bungee/command/CommandPerms.java
++++ b/proxy/src/main/java/net/md_5/bungee/command/CommandPerms.java
+@@ -12,7 +12,7 @@ public class CommandPerms extends Command
+ 
+     public CommandPerms()
+     {
+-        super( "perms" );
++        super( "proxyperms" ); // TubeCord - Rename BungeeCord provided commands
+     }
+ 
+     @Override
+diff --git a/proxy/src/main/java/net/md_5/bungee/command/CommandReload.java b/proxy/src/main/java/net/md_5/bungee/command/CommandReload.java
+index 6f6859fc..88bf93f4 100644
+--- a/proxy/src/main/java/net/md_5/bungee/command/CommandReload.java
++++ b/proxy/src/main/java/net/md_5/bungee/command/CommandReload.java
+@@ -23,7 +23,7 @@ public class CommandReload extends Command
+         BungeeCord.getInstance().startListeners();
+         BungeeCord.getInstance().getPluginManager().callEvent( new ProxyReloadEvent( sender ) );
+ 
+-        sender.sendMessage( ChatColor.BOLD.toString() + ChatColor.RED.toString() + "Waterfall has been reloaded."
+-                + " This is NOT advisable and you will not be supported with any issues that arise! Please restart Waterfall ASAP." );
++        sender.sendMessage( ChatColor.BOLD.toString() + ChatColor.RED.toString() + "TubeCord has been reloaded."
++                + " This is NOT advisable and you will not be supported with any issues that arise! Please restart TubeCord ASAP." ); // TubeCord - Migrate brand to TubeCord
+     }
+ }
+diff --git a/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandHelp.java b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandHelp.java
+new file mode 100644
+index 00000000..4c51101a
+--- /dev/null
++++ b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandHelp.java
+@@ -0,0 +1,16 @@
++package xyz.tcbuildmc.tubecord.command;
++
++import net.md_5.bungee.api.ChatColor;
++import net.md_5.bungee.api.CommandSender;
++import net.md_5.bungee.api.plugin.Command;
++
++public class CommandHelp extends Command {
++    public CommandHelp() {
++        super("proxyhelp", "tubecord.command.help");
++    }
++
++    @Override
++    public void execute(CommandSender sender, String[] args) {
++        sender.sendMessage(ChatColor.GOLD + "See our GitHub wiki: https://github.com/TCBuildMC/TubeCord/wiki");
++    }
++}
+diff --git a/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java
+new file mode 100644
+index 00000000..6caf5cdb
+--- /dev/null
++++ b/proxy/src/main/java/xyz/tcbuildmc/tubecord/command/CommandServerList.java
+@@ -0,0 +1,37 @@
++package xyz.tcbuildmc.tubecord.command;
++
++import net.md_5.bungee.BungeeCord;
++import net.md_5.bungee.api.CommandSender;
++import net.md_5.bungee.api.config.ServerInfo;
++import net.md_5.bungee.api.plugin.Command;
++
++import java.util.Map;
++
++public class CommandServerList extends Command {
++    public CommandServerList() {
++        super("serverlist", "tubecord.command.serverlist");
++    }
++
++    @Override
++    public void execute(CommandSender sender, String[] args) {
++        Map<String, ServerInfo> servers = BungeeCord.getInstance().getServers();
++        StringBuilder builder = new StringBuilder(String.format("There are %s servers in this proxy.", servers.size()));
++
++        builder.append("\n");
++        servers.forEach((String name, ServerInfo info) -> {
++            builder.append("==============================\n");
++            builder.append(String.format("id: %s\n", name));
++            builder.append(String.format("name: %s\n", info.getName()));
++            builder.append(String.format("player count: %d\n", info.getPlayers().size()));
++            builder.append(String.format("motd: %s\n", info.getMotd()));
++
++            if (info.isRestricted()) {
++                builder.append(String.format("restrict join: %b\n", info.isRestricted()));
++                builder.append(String.format("join perm: %s\n", info.getPermission()));
++                builder.append(String.format("whether you can join: %b\n", info.canAccess(sender)));
++            }
++        });
++
++        sender.sendMessage(builder.toString());
++    }
++}
+-- 
+2.34.1
+
